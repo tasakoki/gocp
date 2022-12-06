@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>電柱番号</title>
+</head>
+<body>
+
+<p>電柱番号で行こうlite</p>
+
+<p>
+<label>電柱番号：<input type="text" id="numberText" minlength="12" maxlength="12" size="12"></label>
+<input type="button" value="Go!!" id="checkButton">
+</p>
+
+<p id="msg"></p>
+
+<script>
+function butotnClick(){
+    var b = new Array(12);
+    var j;
+    var F = new Array(3);
+    var Fx, Fy, f, d, e = 0;
+    d = 10000000000.0;
+    var getn = document.getElementById("numberText").value;
+    b[0] = ~~(getn/100000000000.0);
+    for(j = 1; j <= 11; j++){
+        e = (e + b[j - 1]) * 10;
+        b[j] = ~~(getn / d - e);
+        d = d / 10;
+    }
+    Fx = (b[0] * 2 / 3 + 40)
+        + (b[2] * 10000
+        + b[4] * 1000
+        + b[6] * 100
+        + b[8] * 10
+        + b[9]) / 120000;
+
+    Fy = ((b[1] + 2) % 10 + 138)
+        + (b[3] * 10000
+        + b[5] * 1000
+        + b[7] * 100
+        + b[10] * 10
+        + b[11]) / 80000;
+
+    F[0] = (Fx - 0.00010695 * Fx + 0.000017464 * Fy + 0.0046017);
+    F[1] = (Fy - 0.000046038 * Fx - 0.000083043 * Fy + 0.010040);
+    var sum = parseInt(getn, 10) / 2;
+    msg.innerText = '緯度：' + F[0] + ', 経度：' + F[1];
+    urltext = "http://maps.google.com/maps?q=" + F[0] + "," + F[1];
+    window.open(urltext, '_blank');
+}
+
+let nameText = document.getElementById('nameText');
+let msg = document.getElementById('msg');
+
+let checkButton = document.getElementById('checkButton');
+checkButton.addEventListener('click', butotnClick);
+</script>
+<small>©️ 2022 H2020069</small>
+</body>
+</html>
